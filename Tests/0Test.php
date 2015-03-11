@@ -48,11 +48,6 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
     {
         $this->url('/');        
 
-/*        $this->byName('q')->value('Selenium');
-        $element = $this->byCssSelector('input[value="Google 搜尋"]');
-        $this->moveto($element);
-        $element->click();
-        */
         $this->byName('q')->value('Selenium');
         $this->keys(PHPUnit_Extensions_Selenium2TestCase_Keys::ENTER);
         $this->waitAjaxComplete();
