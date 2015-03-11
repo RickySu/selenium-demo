@@ -1,5 +1,5 @@
 <?php
-class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
+class Example2Test extends PHPUnit_Extensions_Selenium2TestCase
 {
     public static function browsers()
     {
@@ -22,14 +22,16 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
     public function setup()
     {
         $this->setBrowserUrl('http://getbootstrap.com/');
-    }
+    }    
     
     public function test_click()
     {
         $this->url('/javascript/');
-        $element = $this->byCssSelector('button[data-target="#exampleModal"]');
-        $this->moveto($element);
-        $element->click();
+        
+        $this->execute(array(
+            'script' => "\$('button[data-whatever=\"@mdo\"]').click();",
+            'args' => array(),  
+        ));
         
         $this->waitUntil(function(){
             if($this->byCssSelector('#exampleModal button[data-dismiss="modal"]')->displayed()){
@@ -37,7 +39,12 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
             }
         }, 10000);
         
-        $this->assertEquals('New message to @mdo', $this->byCssSelector('#exampleModalLabel')->text());
+        $label = $this->execute(array(
+            'script' => "return \$('#exampleModalLabel').html();",
+            'args' => array(),  
+        ));        
+        
+        $this->assertEquals('New message to @mdo', $label);
 
         $element = $this->byCssSelector('#exampleModal button[data-dismiss="modal"]');
         $this->moveto($element);
@@ -49,4 +56,20 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
             }
         }, 10000);
     }
+    
+    public function test_callback()
+    {
+        $this->url('/');
+        $this->timeouts()->asyncScript(10000);
+        $html = $this->executeAsync(array(
+            'script' => '
+                var callback = arguments[0];
+                $.get("/javascript/", function(data){
+                    return callback(data);                
+                })
+            ',
+            'args' => array(),  
+        ));
+        $this->assertGreaterThan(0, preg_match('/^<!DOCTYPE html>/i', $html));
+    }    
 }

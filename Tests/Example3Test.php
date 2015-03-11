@@ -1,5 +1,5 @@
 <?php
-class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
+class Example3Test extends PHPUnit_Extensions_Selenium2TestCase
 {
     public static function browsers()
     {
@@ -15,29 +15,27 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
                  'port' => 4444,
                  'browser' => 'chrome test browser',
                  'browserName' => 'chrome', 
+            ),
+            array(
+                 'host' => '127.0.0.1',
+                 'port' => 4445,
+                 'browser' => 'ie test browser',
+                 'browserName' => 'ie', 
             ),            
         );        
     }
     
     public function setup()
     {
-        $this->setBrowserUrl('http://play.niceday.tw/');
+        $this->setBrowserUrl('http://www.google.com/');
     }    
-        
-    public function test_max()
+    
+    public function test_click()
     {
-        $this->currentWindow()->maximize();
         $this->url('/');
-        sleep(1);
-        $this->assertTrue($this->byCssSelector("#homeBanner")->displayed());
+        $testImage = new imagick();
+        $testImage->readimageblob($this->currentScreenshot());
+        $testImage->writeimage(__DIR__."/screenshot/{$this->getBrowser()}.jpg");
     }
-  
-    public function test_monile()
-    {
-        $this->currentWindow()->size(array('width' => 400, 'height' => 600));    
-        $this->url('/');    
-        sleep(1);
-        $this->assertFalse($this->byCssSelector("#homeBanner")->displayed());        
-    }    
 
 }

@@ -1,5 +1,5 @@
 <?php
-class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
+class Example0Test extends PHPUnit_Extensions_Selenium2TestCase
 {
     public static function browsers()
     {
@@ -30,10 +30,13 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->setBrowserUrl('http://google.com/');
     }
 
+    public function setUpPage()
+    {
+        $this->url('/');
+    }
+    
     public function test_search_click()
     {
-        $this->url('/');        
-
         $this->byName('q')->value('Selenium');
         $element = $this->byCssSelector('input[value="Google 搜尋"]');
         $this->moveto($element);
@@ -46,8 +49,6 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
     
     public function test_search_enter()
     {
-        $this->url('/');        
-
         $this->byName('q')->value('Selenium');
         $this->keys(PHPUnit_Extensions_Selenium2TestCase_Keys::ENTER);
         $this->waitAjaxComplete();
