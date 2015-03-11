@@ -22,23 +22,7 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
     public function setup()
     {
         $this->setBrowserUrl('http://getbootstrap.com/');
-    }
-    
-    public function test_callback()
-    {
-        $this->url('/');
-        $this->timeouts()->asyncScript(10000);
-        $html = $this->executeAsync(array(
-            'script' => '
-                var callback = arguments[0];
-                $.get("/javascript/", function(data){
-                    return callback(data);                
-                })
-            ',
-            'args' => array(),  
-        ));
-        $this->assertGreaterThan(0, preg_match('/^<!DOCTYPE html>/i', $html));
-    }
+    }    
     
     public function test_click()
     {
@@ -72,4 +56,20 @@ class clickTest extends \PHPUnit_Extensions_Selenium2TestCase
             }
         }, 10000);
     }
+    
+    public function test_callback()
+    {
+        $this->url('/');
+        $this->timeouts()->asyncScript(10000);
+        $html = $this->executeAsync(array(
+            'script' => '
+                var callback = arguments[0];
+                $.get("/javascript/", function(data){
+                    return callback(data);                
+                })
+            ',
+            'args' => array(),  
+        ));
+        $this->assertGreaterThan(0, preg_match('/^<!DOCTYPE html>/i', $html));
+    }    
 }
